@@ -69,3 +69,7 @@ src/
 skill/
   interactive-3d-presentation/   SKILL.md, REFERENCE.md, template/
 ```
+
+## Licence
+
+[MIT](LICENSE).
