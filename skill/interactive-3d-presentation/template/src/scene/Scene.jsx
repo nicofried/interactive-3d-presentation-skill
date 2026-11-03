@@ -57,6 +57,27 @@ function CameraRig() {
   return null
 }
 
+// Centres the scene in the space the side panels leave free, so labels don't orbit under them. The view offset shifts
+// the projection, not the camera, so slide cameras, orbiting, labels and clicks all keep working.
+function ViewFrame() {
+  const camera = useThree((s) => s.camera), size = useThree((s) => s.size)
+  const dx = useRef(0)
+  useFrame((_, dt) => {
+    let l = 0, r = size.width
+    for (const el of document.querySelectorAll('.panel, .floors')) {
+      const b = el.getBoundingClientRect()
+      if (!b.width || b.width > size.width / 2) continue // full-width panels (narrow screens) don't shift the centre
+      if (b.left > size.width / 2) r = Math.min(r, b.left); else l = Math.max(l, b.right)
+    }
+    const prev = dx.current
+    dx.current += ((l + r) / 2 - size.width / 2 - dx.current) * (1 - Math.exp(-Math.min(dt, 0.05) * 4))
+    if (Math.abs(dx.current) < 0.5) { if (camera.view?.enabled) camera.clearViewOffset(); return }
+    if (Math.abs(dx.current - prev) > 0.01 || camera.view?.fullWidth !== size.width || camera.view?.fullHeight !== size.height)
+      camera.setViewOffset(size.width, size.height, -dx.current, 0, size.width, size.height)
+  })
+  return null
+}
+
 // Recolours the shared materials whenever the light/dark theme changes.
 function ThemeDriver() {
   const scene = useThree((s) => s.scene), theme = useStore((s) => s.theme)
@@ -119,6 +140,7 @@ export default function Scene() {
         </SceneGroup>
         <OrbitControls makeDefault enableDamping enablePan={false} minDistance={7} maxDistance={110} autoRotateSpeed={0.5} />
         <CameraRig />
+        <ViewFrame />
         <SimDriver />
         <ThemeDriver />
       </Canvas>

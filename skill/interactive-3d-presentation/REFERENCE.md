@@ -75,6 +75,10 @@ Add fields freely: `applySlide()` in `sim/world.js` and `CameraRig` read the sli
 - **Theme switch without re-render:** palettes are plain objects, materials are shared module-level instances, and
   `applyTheme()` recolours them in place. In dark mode, additive blending on lines and particles gives the glow. Set
   `data-theme` before first paint (snippet in `index.html`) so CSS and canvas agree from the first frame.
+- **Framing around the panels:** `ViewFrame` in `Scene.jsx` measures the side panels each frame and shifts the
+  projection with `camera.setViewOffset`, so the scene centres in the free space and labels don't orbit under the panel.
+  It moves the projection, not the camera, so slide cameras, orbiting, labels and clicks keep working. Full-width
+  panels (narrow screens) are ignored.
 - **Labels in 3D:** drei `<Html>` with `zIndexRange` so labels stay under the panels, and `onPointerDown` that calls
   `stopPropagation` so clicking a label doesn't start an orbit drag.
 - **Scenarios:** a list of `{ at, ...effect, log }` steps in seconds plus a clock range. `tick()` fires each step once,
