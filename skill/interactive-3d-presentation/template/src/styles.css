@@ -1,0 +1,133 @@
+/* Brand tokens: swap these for your own palette and fonts. The scene colours live in src/theme.js. */
+:root{
+  --font:"Segoe UI",Inter,system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  --cyan:#38BDF8;--magenta:#F43F5E;--ease:cubic-bezier(.2,.7,.2,1);
+}
+[data-theme=dark]{
+  --bg:#0b1020;--ink:#F3F5FB;--sl:#C3CAE0;--mu:#8A94B4;--ln:rgba(129,140,248,.2);--soft:rgba(226,232,255,.06);
+  --surface:rgba(14,20,42,.82);--surface-b:rgba(129,140,248,.25);--shadow:0 24px 50px -24px rgba(0,0,0,.7);
+  --acc:#818CF8;--acc-ink:#0b1020;--acc-soft:rgba(129,140,248,.16);
+}
+[data-theme=light]{
+  --bg:#F5F7FB;--ink:#141B34;--sl:#414B6B;--mu:#7A839F;--ln:#DFE3EE;--soft:#EEF1F8;
+  --surface:rgba(255,255,255,.9);--surface-b:rgba(210,216,232,.95);--shadow:0 18px 40px -20px rgba(20,27,52,.3);
+  --acc:#4F46E5;--acc-ink:#fff;--acc-soft:#E8E9FD;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit;border:0;background:none}
+button{cursor:pointer}
+.scene{position:fixed;inset:0}
+.glass{background:var(--surface);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--surface-b);border-radius:18px;box-shadow:var(--shadow)}
+.k{display:block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+
+/* Top bar */
+.top{position:fixed;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;z-index:10}
+.top>*{pointer-events:auto}
+.brand{padding:9px 16px}.brand b{display:block;font-size:14px}.brand small{color:var(--mu);font-size:12px}
+.tools{display:flex;gap:4px;padding:5px;align-items:center}
+.tools button{padding:7px 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--sl)}
+.tools button:hover{background:var(--soft)}.tools button.on{background:var(--acc-soft);color:var(--acc)}
+
+/* Hotspot labels anchored in 3D */
+.hs{display:flex;align-items:center;gap:7px;white-space:nowrap;padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:600;
+  background:var(--surface);border:1px solid var(--surface-b);box-shadow:var(--shadow);transition:transform .2s var(--ease)}
+.hs:hover,.hs.sel{transform:scale(1.06);border-color:var(--acc)}
+.hs i,.steps i,.legend i{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+
+/* Panel */
+.panel{position:fixed;right:14px;top:84px;width:360px;max-height:calc(100% - 170px);overflow:auto;padding:20px;z-index:9;animation:in .5s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateX(24px)}}
+.panel h2{font-size:22px;line-height:1.2;margin:6px 0 4px}
+.panel .sub{color:var(--mu);font-size:13px;margin-bottom:10px}
+.panel .txt{font-size:14.5px;line-height:1.55;color:var(--sl)}
+.panel .txt b{color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-top:14px}
+.kpi{background:var(--soft);border-radius:12px;padding:10px}.kpi b{display:block;font-size:20px}.kpi span{font-size:11.5px;color:var(--mu)}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--mu);margin-bottom:8px}
+.badge.on{background:var(--acc-soft);color:var(--acc)}
+.link{margin-top:14px;font-size:13px;font-weight:600;color:var(--acc)}
+.ed{outline:1px dashed var(--acc);outline-offset:3px;border-radius:4px;cursor:text;min-height:1em}
+.ed:empty::before{content:attr(data-ph);color:var(--mu)}
+.ed:focus{outline-style:solid}
+
+/* Blocks */
+.steps{list-style:none;margin-top:14px;display:grid;gap:6px}
+.steps button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:9px 11px;border-radius:12px;background:var(--soft);font-size:13.5px}
+.steps button.on,.steps button:hover{outline:1px solid var(--acc)}
+.chart{margin-top:14px}.chart svg{width:100%;height:auto}.chart text{font-size:11px;fill:var(--mu)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mu);margin-bottom:6px}.legend span{display:flex;align-items:center;gap:6px}
+.readout{font-size:12.5px;color:var(--sl);margin-top:4px}
+.scenario{margin-top:14px}.scenario .row{display:flex;align-items:center;justify-content:space-between}
+.clock{font-size:22px;font-variant-numeric:tabular-nums}
+.log{list-style:none;margin-top:10px;display:grid;gap:5px;font-size:13px;color:var(--sl)}
+.log li{padding:7px 10px;border-left:3px solid var(--acc);background:var(--soft);border-radius:0 8px 8px 0;animation:in .4s var(--ease)}
+.cta{background:var(--acc);color:var(--acc-ink);font-weight:700;padding:12px 22px;border-radius:999px}
+.cta.small{padding:8px 16px;font-size:13px}
+
+/* Floor rail (building slides) */
+.floors{position:fixed;left:14px;top:84px;width:210px;padding:12px;z-index:9;display:grid;gap:3px;animation:in .5s var(--ease)}
+.floors h6{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin:0 6px 6px}
+.floors button{display:flex;align-items:center;gap:10px;text-align:left;padding:7px 8px;border-radius:11px;font-size:13px;font-weight:600;color:var(--sl)}
+.floors button:hover{background:var(--soft)}.floors button.on{background:var(--acc-soft);color:var(--acc)}
+.floors .n{width:24px;height:24px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.floors .all{justify-content:center;margin-top:4px;border:1px solid var(--ln)}
+.floors small{font-size:11px;color:var(--mu);text-align:center;margin-top:4px}
+
+/* Navigation */
+.nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:7px 10px;z-index:9}
+.nav button{padding:6px 12px;border-radius:999px;font-size:16px}.nav button:hover{background:var(--soft)}
+.dots{display:flex;gap:6px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--ln);cursor:pointer}
+.dots i.on{background:var(--acc)}.dots i.hid{outline:1px dashed var(--mu);background:none}
+.count{font-size:12px;color:var(--mu);font-variant-numeric:tabular-nums}
+
+/* Intro */
+.intro{position:fixed;inset:0;display:grid;place-items:center;z-index:20;background:radial-gradient(900px 600px at 70% 30%,var(--acc-soft),transparent 60%),color-mix(in srgb,var(--bg) 70%,transparent)}
+.intro-box{text-align:center;max-width:620px;padding:20px}
+.intro h1{font-size:44px;line-height:1.1;margin:10px 0}
+.intro .by{color:var(--mu);margin-bottom:24px}
+.intro .hint{margin-top:18px;font-size:12px;color:var(--mu)}
+
+/* Slide menu */
+.sorter{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 55%,transparent)}
+.sorter-box{width:min(1000px,calc(100% - 40px));max-height:calc(100% - 80px);overflow:auto;padding:20px}
+.sorter header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px}
+.sorter header small{color:var(--mu);font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.card{position:relative;padding:14px 14px 12px;border-radius:14px;background:var(--soft);border:1px solid var(--ln);cursor:grab;display:flex;flex-direction:column;gap:4px;min-height:120px;transition:transform .15s,opacity .15s}
+.card:focus-visible{outline:2px solid var(--acc)}
+.card.cur{border-color:var(--acc)}
+.card.hid{opacity:.45;border-style:dashed}
+.card.dragging{opacity:.3}
+.card.over{transform:translateX(8px);box-shadow:-4px 0 0 var(--acc)}
+.card .num{font-size:22px;font-weight:700;color:var(--mu)}
+.card b{font-size:14px}
+.card .tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:auto}
+.card em{font-style:normal;font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--acc-soft);color:var(--acc)}
+.card .eye{position:absolute;top:10px;right:10px;font-size:11px;padding:3px 8px;border-radius:999px;background:var(--surface)}
+.card .open{font-size:12px;font-weight:600;color:var(--acc);align-self:flex-start}
+
+/* Author bar */
+.author{position:fixed;left:14px;bottom:16px;width:290px;padding:14px;z-index:11;display:grid;gap:8px}
+.author label{display:grid;gap:3px;font-size:11px;color:var(--mu)}
+.author input{padding:7px 10px;border-radius:10px;background:var(--soft);border:1px solid var(--ln);font-size:13px;color:var(--ink)}
+.author .row{display:flex;gap:6px}.author .row button{flex:1;padding:7px;border-radius:10px;background:var(--soft);font-size:12.5px;font-weight:600}
+.author .row button:hover{outline:1px solid var(--acc)}
+.author small{font-size:11px;color:var(--mu);line-height:1.4}
+
+/* Narrow screens: the panel becomes a bottom sheet, so the scene stays visible above it. */
+@media (max-width:760px){
+  .top{left:10px;right:10px;top:10px;gap:8px}
+  .brand{padding:7px 12px}.brand small{display:none}
+  .tools button{padding:6px 9px;font-size:12px}
+  .panel{left:10px;right:10px;width:auto;top:auto;bottom:66px;max-height:44%;padding:16px}
+  .panel h2{font-size:18px}
+  .nav{bottom:10px}.dots{display:none}
+  .floors{top:64px;left:10px;width:auto;padding:8px}.floors h6,.floors small,.floors button span+*{display:none}
+  .author{left:10px;right:10px;width:auto;top:64px;bottom:auto;max-height:40%;overflow:auto}
+  .intro h1{font-size:30px}
+  .cards{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+}
+.count{white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
